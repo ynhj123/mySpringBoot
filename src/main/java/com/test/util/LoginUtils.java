@@ -1,8 +1,8 @@
 
 package com.test.util;
 
-import com.chaoxing.basicedu.meeting_customized.util.constant.CookieConstant;
 import com.test.model.entity.UserSessionInfo;
+import com.test.util.constant.CookieConstant;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.Cookie;
