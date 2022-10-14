@@ -1,0 +1,32 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    container_name: y1-redis
+    volumes:
+      - ../data/redis:/data
+    environment:
+      - REDIS_PASSWORD=123456
+    networks:
+      - y1-net
+    ports:
+      - 6379:6379
+  mysql:
+    image: mysql:5.7
+    container_name: y1-mysql
+    networks:
+      - y1-net
+    ports:
+      - 3306:3306
+    volumes:
+      - ../data/mysql:/var/lib/mysql
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: root123
+
+
+
+
+networks:
+  y1-net:
+    external: false
