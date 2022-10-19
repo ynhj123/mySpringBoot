@@ -1,4 +1,4 @@
-package com.ynhj.nativemysql.common.exception;
+package com.ynhj.nativemysql.common.entity;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
