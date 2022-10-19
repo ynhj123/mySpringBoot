@@ -1,7 +1,7 @@
 package com.ynhj.nativemysql.repository;
 
-import com.ynhj.nativemysql.entiry.ProductEntity;
+import com.ynhj.nativemysql.entiry.ProductPo;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
-public interface ProductRepo extends ReactiveCrudRepository<ProductEntity, Long> {
+public interface ProductRepo extends ReactiveCrudRepository<ProductPo, Long> {
 }

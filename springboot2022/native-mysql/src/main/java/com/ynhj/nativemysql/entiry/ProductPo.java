@@ -12,7 +12,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @Builder
 @Table("product")
-public class ProductEntity {
+public class ProductPo {
     @Id
     private long id;
     private String name;

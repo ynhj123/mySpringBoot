@@ -2,8 +2,8 @@ package com.ynhj.nativemysql.controller;
 
 import com.ynhj.nativemysql.common.entity.GlobalException;
 import com.ynhj.nativemysql.common.entity.R;
-import com.ynhj.nativemysql.entiry.ProductEntity;
-import com.ynhj.nativemysql.repository.ProductRepo;
+import com.ynhj.nativemysql.entiry.vo.ProductVo;
+import com.ynhj.nativemysql.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,11 +18,11 @@ import java.util.List;
 @ResponseBody
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductRepo productRepo;
+    private final ProductService productService;
 
     @GetMapping("/products")
-    Mono<R<List<ProductEntity>>> getAll() {
-        return R.ok(this.productRepo.findAll().collectList());
+    Mono<R<List<ProductVo>>> getAll() {
+        return R.ok(productService.findAll().collectList());
     }
 
     @GetMapping("/error")
@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    Mono<R<ProductEntity>> getOne(@PathVariable Long id) {
-        return R.ok(this.productRepo.findById(id));
+    Mono<R<ProductVo>> getOne(@PathVariable Long id) {
+        return R.ok(productService.findById(id));
     }
 }

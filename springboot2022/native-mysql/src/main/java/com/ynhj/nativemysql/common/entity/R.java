@@ -1,5 +1,7 @@
 package com.ynhj.nativemysql.common.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,9 +21,13 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel("全局效应")
 public class R<T> implements Serializable {
+    @ApiModelProperty("状态码")
     private int status;
+    @ApiModelProperty("消息")
     private String message;
+    @ApiModelProperty("数据")
     T data;
 
     public static <T> Mono<R<T>> ok(Mono<T> data) {
