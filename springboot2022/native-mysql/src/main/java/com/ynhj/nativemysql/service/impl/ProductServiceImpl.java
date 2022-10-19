@@ -23,12 +23,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Flux<ProductVo> findAll() {
-        return productRepo.findAll().map(this::wrapper);
+        return productRepo.findAll().map(this::wrapper).cache();
     }
 
     @Override
     public Mono<ProductVo> findById(Long id) {
-        return productRepo.findById(id).map(this::wrapper);
+        return productRepo.findById(id).map(this::wrapper).cache();
     }
 
     ProductVo wrapper(ProductPo productPo) {
