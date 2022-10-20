@@ -25,8 +25,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepo productRepo;
 
     @Override
-    public Flux<ProductVo> findAll() {
-        return productRepo.findAll().map(this::wrapper).cache();
+    public Flux<ProductVo> findAll(Long pageSize, Long pageNum) {
+        return productRepo.findAll().skip(pageNum * pageSize).take(pageSize).map(this::wrapper).cache();
     }
 
     @Override
@@ -45,7 +45,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Mono<ProductVo> insert(ProductDto productDto) {
         ProductPo productPo = new ProductPo();
-        productPo.setId(SnowflakeIdUtils.next());
         productPo.setDescription(productDto.getName());
         productPo.setName(productDto.getName());
         return productRepo.save(productPo).map(this::wrapper);

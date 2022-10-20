@@ -7,6 +7,7 @@ import com.ynhj.nativemysql.entiry.dto.UpdateProductDto;
 import com.ynhj.nativemysql.entiry.vo.ProductVo;
 import com.ynhj.nativemysql.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,8 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/products")
-    Mono<R<List<ProductVo>>> getAll() {
-        return R.ok(productService.findAll().collectList());
+    Mono<R<List<ProductVo>>> getAll(@Param("pageSize") Long pageSize, @Param("pageNum") Long pageNum) {
+        return R.ok(productService.findAll(pageSize, pageNum).collectList());
     }
 
     @GetMapping("/error")

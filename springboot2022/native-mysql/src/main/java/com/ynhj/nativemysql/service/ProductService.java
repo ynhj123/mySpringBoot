@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
  */
 public interface ProductService {
     @Cacheable(value = "product-list")
-    Flux<ProductVo> findAll();
+    Flux<ProductVo> findAll(Long pageSize, Long pageNum);
 
     @Cacheable(value = "product-id", key = "#p0")
     Mono<ProductVo> findById(Long id);
@@ -25,6 +25,6 @@ public interface ProductService {
     @CacheEvict(cacheNames = {"product-list"}, allEntries = true)
     Mono<ProductVo> insert(ProductDto productDto);
 
-    @CacheEvict(cacheNames = "product-id", key = "#p0.id")
+    @CacheEvict(cacheNames = {"product-list", "product-id"}, allEntries = true)
     Mono<ProductVo> update(UpdateProductDto productDto);
 }
