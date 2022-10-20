@@ -2,16 +2,17 @@ package com.ynhj.nativemysql.controller;
 
 import com.ynhj.nativemysql.common.entity.GlobalException;
 import com.ynhj.nativemysql.common.entity.R;
+import com.ynhj.nativemysql.entiry.dto.ProductDto;
+import com.ynhj.nativemysql.entiry.dto.UpdateProductDto;
 import com.ynhj.nativemysql.entiry.vo.ProductVo;
 import com.ynhj.nativemysql.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -30,8 +31,18 @@ public class ProductController {
         throw new GlobalException(HttpStatus.FORBIDDEN);
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/product/{id}")
     Mono<R<ProductVo>> getOne(@PathVariable Long id) {
         return R.ok(productService.findById(id));
+    }
+
+    @PostMapping("/product")
+    Mono<R<ProductVo>> insert(@Valid @RequestBody ProductDto productDto) {
+        return R.ok(productService.insert(productDto));
+    }
+
+    @PutMapping("/product")
+    Mono<R<ProductVo>> update(@Valid @RequestBody UpdateProductDto productDto) {
+        return R.ok(productService.update(productDto));
     }
 }
