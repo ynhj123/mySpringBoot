@@ -23,27 +23,27 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/products")
-    Mono<R<List<ProductVo>>> getAll(@Param("pageSize") Long pageSize, @Param("pageNum") Long pageNum) {
+    public Mono<R<List<ProductVo>>> getAll(@Param("pageSize") Long pageSize, @Param("pageNum") Long pageNum) {
         return R.ok(productService.findAll(pageSize, pageNum).collectList());
     }
 
     @GetMapping("/error")
-    Mono<String> error() {
+    public Mono<String> error() {
         throw new GlobalException(HttpStatus.FORBIDDEN);
     }
 
     @GetMapping("/product/{id}")
-    Mono<R<ProductVo>> getOne(@PathVariable Long id) {
+    public Mono<R<ProductVo>> getOne(@PathVariable Long id) {
         return R.ok(productService.findById(id));
     }
 
     @PostMapping("/product")
-    Mono<R<ProductVo>> insert(@Valid @RequestBody ProductDto productDto) {
+    public Mono<R<ProductVo>> insert(@Valid @RequestBody ProductDto productDto) {
         return R.ok(productService.insert(productDto));
     }
 
     @PutMapping("/product")
-    Mono<R<ProductVo>> update(@Valid @RequestBody UpdateProductDto productDto) {
+    public Mono<R<ProductVo>> update(@Valid @RequestBody UpdateProductDto productDto) {
         return R.ok(productService.update(productDto));
     }
 }

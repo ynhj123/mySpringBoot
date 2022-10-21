@@ -22,14 +22,13 @@ import java.util.Optional;
 public class TraceIdWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String traceId1 = exchange.getRequest().getHeaders().getFirst(TraceUtils.TRACE_ID);
+        final String traceId = Optional.ofNullable(traceId1).orElse(SnowflakeIdUtils.next().toString());
+        TraceUtils.addTraceId(traceId);
         return chain.filter(exchange)
                 // 放入当前上下文，类似于ThreadLocal
                 .contextWrite(context -> {
                     // header 中是否有TRACE-ID
-                    String traceId = exchange.getRequest().getHeaders().getFirst(TraceUtils.TRACE_ID);
-
-                    traceId = Optional.ofNullable(traceId).orElse(SnowflakeIdUtils.next().toString());
-
                     Context contextTmp = context.put(TraceUtils.TRACE_ID, traceId);
                     exchange.getAttributes().put(TraceUtils.TRACE_ID, traceId);
                     return contextTmp;
