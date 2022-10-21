@@ -1,6 +1,6 @@
 package com.ynhj.nativemysql.service.impl;
 
-import com.ynhj.nativemysql.common.utils.SnowflakeIdUtils;
+import com.ynhj.nativemysql.common.entity.GlobalException;
 import com.ynhj.nativemysql.entiry.ProductPo;
 import com.ynhj.nativemysql.entiry.dto.ProductDto;
 import com.ynhj.nativemysql.entiry.dto.UpdateProductDto;
@@ -8,6 +8,7 @@ import com.ynhj.nativemysql.entiry.vo.ProductVo;
 import com.ynhj.nativemysql.repository.ProductRepo;
 import com.ynhj.nativemysql.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -52,10 +53,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<ProductVo> update(UpdateProductDto productDto) {
-        return productRepo.findById(productDto.getId()).flatMap(productPo -> {
-            productPo.setName(productDto.getName());
-            productPo.setDescription(productDto.getDes());
-            return productRepo.save(productPo);
-        }).map(this::wrapper);
+        return productRepo.findById(productDto.getId())
+                .switchIfEmpty(Mono.error(new GlobalException(HttpStatus.NOT_FOUND)))
+                .flatMap(productPo -> {
+                    productPo.setName(productDto.getName());
+                    productPo.setDescription(productDto.getDes());
+                    return productRepo.save(productPo);
+                }).map(this::wrapper);
+    }
+
+    @Override
+    public Mono<Void> delete(Long id) {
+        return productRepo.deleteById(id).switchIfEmpty(Mono.error(new GlobalException(HttpStatus.NOT_FOUND)));
     }
 }

@@ -46,4 +46,9 @@ public class ProductController {
     public Mono<R<ProductVo>> update(@Valid @RequestBody UpdateProductDto productDto) {
         return R.ok(productService.update(productDto));
     }
+
+    @DeleteMapping("/product/{id}")
+    Mono<R<Void>> delete(@PathVariable Long id) {
+        return R.ok(productService.delete(id));
+    }
 }

@@ -27,4 +27,7 @@ public interface ProductService {
 
     @CacheEvict(cacheNames = {"product-list", "product-id"}, allEntries = true)
     Mono<ProductVo> update(UpdateProductDto productDto);
+
+    @CacheEvict(cacheNames = {"product-list", "product-id"}, allEntries = true)
+    Mono<Void> delete(Long id);
 }
