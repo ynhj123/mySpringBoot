@@ -30,7 +30,7 @@ public class R<T> implements Serializable {
     @ApiModelProperty("数据")
     T data;
 
-    public static <T> Mono<R<T>> ok(Mono<T> data) {
+    public static <T> Mono<R<T>> monoOk(Mono<T> data) {
         return data.map(t -> {
             final R<T> responseInfo = new R<T>();
             responseInfo.setStatus(0);
@@ -40,7 +40,28 @@ public class R<T> implements Serializable {
         });
     }
 
-    public static Mono<R<Object>> fail(int status, String message) {
+    public static <T> R<T> monoOk(T data) {
+        final R<T> responseInfo = new R<T>();
+        responseInfo.setStatus(0);
+        responseInfo.setData(data);
+        responseInfo.setMessage("ok");
+        return responseInfo;
+    }
+
+    public static Mono<R<Object>> monoFail(int status, String message) {
         return Mono.just(R.builder().status(status).message(message).build());
+    }
+
+    public static <T> Mono<R<T>> monoFail(int status, String message, T data) {
+        R<T> build = (R<T>) R.builder().status(status).message(message).data(data).build();
+        return Mono.just(build);
+    }
+
+    public static R<Object> fail(int status, String message) {
+        final R responseInfo = new R();
+        responseInfo.setStatus(status);
+        responseInfo.setData(null);
+        responseInfo.setMessage(message);
+        return responseInfo;
     }
 }

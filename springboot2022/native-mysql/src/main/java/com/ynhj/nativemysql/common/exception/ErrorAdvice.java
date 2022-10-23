@@ -20,13 +20,13 @@ public class ErrorAdvice {
     @ExceptionHandler(Exception.class)
     public Mono<R<Object>> handleCustomException(Exception e) {
         log.info("捕获到未处理的Exception异常：{}", e);
-        return R.fail(500, e.getMessage());
+        return R.monoFail(500, e.getMessage());
     }
 
     @ExceptionHandler(GlobalException.class)
     public Mono<R<Object>> handleBusinessException(GlobalException e) {
         log.info("捕获到BusinessException异常：{}", e);
-        return R.fail(e.getStatus().value(), e.getMessage());
+        return R.monoFail(e.getStatus().value(), e.getMessage());
     }
 
 }
