@@ -32,10 +32,15 @@ public class SecurityConfig {
         return http.csrf().disable()
                 .httpBasic().disable()
                 .formLogin().disable()
-                .authorizeExchange().pathMatchers(permitAll).permitAll()
-                .pathMatchers("/**").hasAuthority("user")
-                .anyExchange().authenticated()
-                .and().addFilterAt(jwsFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .authorizeExchange()
+                .pathMatchers(permitAll)
+                .permitAll()
+                .pathMatchers("/**")
+                .hasAuthority("user")
+                .anyExchange()
+                .authenticated()
+                .and()
+                .addFilterAt(jwsFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .build();
     }
 }

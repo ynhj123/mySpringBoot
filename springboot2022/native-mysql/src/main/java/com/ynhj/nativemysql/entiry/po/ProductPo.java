@@ -1,4 +1,4 @@
-package com.ynhj.nativemysql.entiry;
+package com.ynhj.nativemysql.entiry.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,10 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table("users")
-public class UserPo {
+@Table("product")
+public class ProductPo {
     @Id
     private long id;
-    private String username;
-    private String password;
+    private String name;
+    private String description;
 }

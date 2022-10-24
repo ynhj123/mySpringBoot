@@ -1,7 +1,7 @@
 package com.ynhj.nativemysql.service.impl;
 
 import com.ynhj.nativemysql.common.entity.GlobalException;
-import com.ynhj.nativemysql.entiry.ProductPo;
+import com.ynhj.nativemysql.entiry.po.ProductPo;
 import com.ynhj.nativemysql.entiry.dto.ProductDto;
 import com.ynhj.nativemysql.entiry.dto.UpdateProductDto;
 import com.ynhj.nativemysql.entiry.vo.ProductVo;
