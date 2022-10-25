@@ -16,7 +16,7 @@
 - - [ ] [webclient](#)
 - - [ ] [gateway](#)
 - [ ] [springsecurity](https://docs.spring.io/spring-security/reference/reactive/getting-started.html)
-- - [ ] [登录注册](#)
+- - [x] [登录注册](#)
 - [ ] [云原生](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/#getting-started)
 - - [ ] [基于k8s获取配置]()
 - - [ ] [快速启动]()
