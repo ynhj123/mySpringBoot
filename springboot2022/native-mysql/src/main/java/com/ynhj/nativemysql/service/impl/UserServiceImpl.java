@@ -1,5 +1,6 @@
 package com.ynhj.nativemysql.service.impl;
 
+import com.ynhj.nativemysql.common.entity.GlobalException;
 import com.ynhj.nativemysql.common.utils.JwtUtil;
 import com.ynhj.nativemysql.common.utils.SnowflakeIdUtils;
 import com.ynhj.nativemysql.entiry.Role;
@@ -9,6 +10,7 @@ import com.ynhj.nativemysql.entiry.vo.LoginUserVo;
 import com.ynhj.nativemysql.repository.UserRepository;
 import com.ynhj.nativemysql.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,11 +54,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<LoginUserVo> signup(LoginUserDto user) {
-        return Mono.just(user.getUsername())
-                .flatMap(userRepository::findByUsername)
-                .filter(it -> password.matches(user.getPassword(), it.getPassword()))
+        return userRepository.findByUsername(user.getUsername())
                 .switchIfEmpty(save(user))
-                .map(it -> getLoginUserVo(it));
+                .map(userPo -> {
+                    if (password.matches(user.getPassword(), userPo.getPassword())) {
+                        return getLoginUserVo(userPo);
+                    }
+                    throw new GlobalException(HttpStatus.ALREADY_REPORTED);
+                });
     }
 
     private Mono<UserPo> save(LoginUserDto user) {
