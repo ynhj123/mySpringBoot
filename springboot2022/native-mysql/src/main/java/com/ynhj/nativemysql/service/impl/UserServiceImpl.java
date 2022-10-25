@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         return Mono.just(user.getUsername())
                 .flatMap(userRepository::findByUsername)
                 .filter(it -> password.matches(user.getPassword(), it.getPassword()))
-                .map(it -> getLoginUserVo(it));
+                .map(this::getLoginUserVo);
 
 
     }
