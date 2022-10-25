@@ -14,19 +14,19 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("auth")
+@RequestMapping("/auth")
 @Slf4j
 public class LoginController {
     private final UserService userService;
 
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public Mono<R<LoginUserVo>> login(@RequestBody LoginUserDto user) {
         return R.monoOk(userService.login(user));
     }
 
 
-    @PostMapping("signup")
+    @PostMapping("/signup")
     public Mono<R<LoginUserVo>> signUp(@RequestBody LoginUserDto user) {
         return R.monoOk(userService.signup(user));
     }

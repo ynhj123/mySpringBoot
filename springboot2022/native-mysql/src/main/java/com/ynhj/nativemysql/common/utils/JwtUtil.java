@@ -2,13 +2,20 @@ package com.ynhj.nativemysql.common.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
+import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class JwtUtil {
+    private static Key key;
+    public static final String APPSECRET_KEY = "123456123456123456123456123456123456123456123";
+
+    static {
+        key = Keys.hmacShaKeyFor(APPSECRET_KEY.getBytes());
+    }
+
 
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
@@ -17,31 +24,8 @@ public class JwtUtil {
 
     public static final long EXPIRITION = 1000 * 24 * 60 * 60 * 1;
 
-    public static final String APPSECRET_KEY = "yong1_web_secret";
-
     private static final String ROLE_CLAIMS = "rol";
 
-//    public static String generateJsonWebToken(User user) {
-//
-//        if (user.getId() == null || user.getUsername() == null || user.getFaceImage() == null) {
-//            return null;
-//        }
-//
-//        Map<String, Object> map = new HashMap<>();
-//        map.put(ROLE_CLAIMS, "rol");
-//
-//        String token = Jwts
-//                .builder()
-//                .setSubject(SUBJECT)
-//                .setClaims(map)
-//                .claim("id", user.getId())
-//                .claim("name", user.getUsername())
-//                .claim("img", user.getFaceImage())
-//                .setIssuedAt(new Date())
-//                .setExpiration(new Date(System.currentTimeMillis() + EXPIRITION))
-//                .signWith(SignatureAlgorithm.HS256, APPSECRET_KEY).compact();
-//        return token;
-//    }
 
     /**
      * 生成token
@@ -50,51 +34,25 @@ public class JwtUtil {
      * @param role
      * @return
      */
-    public static String createToken(String username, String role) {
-
-        Map<String, Object> map = new HashMap<>();
-        map.put(ROLE_CLAIMS, role);
+    public static String createToken(Long id, String username, List<String> role) {
 
         String token = Jwts
                 .builder()
                 .setSubject(username)
-                .setClaims(map)
+                .claim("id", id)
                 .claim("username", username)
+                .claim(ROLE_CLAIMS, role)
                 .setIssuedAt(new Date())
-                //.setExpiration(new Date(System.currentTimeMillis() + EXPIRITION))
-                .signWith(SignatureAlgorithm.HS256, APPSECRET_KEY).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRITION))
+                .signWith(key)
+                .compact();
 
-        return token;
-    }
-
-    public static String createToken(Map<String, Object> map) {
-        String token = Jwts
-                .builder()
-                .setSubject(SUBJECT)
-                .setClaims(map)
-                .setIssuedAt(new Date())
-                //.setExpiration(new Date(System.currentTimeMillis() + EXPIRITION))
-                .signWith(SignatureAlgorithm.HS256, APPSECRET_KEY).compact();
-        return token;
-    }
-
-
-    public static String createToken(String ploy) {
-        Map<String, Object> hashMap = new HashMap<String, Object>() {{
-            put("alg", "HS256");
-            put("typ", "JWT");
-        }};
-        String token = Jwts
-                .builder()
-                .setHeader(hashMap)
-                .setPayload(ploy)
-                .signWith(SignatureAlgorithm.HS256, APPSECRET_KEY).compact();
         return token;
     }
 
     public static Claims checkJWT(String token) {
         try {
-            final Claims claims = Jwts.parser().setSigningKey(APPSECRET_KEY).parseClaimsJws(token).getBody();
+            final Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             return claims;
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,7 +67,7 @@ public class JwtUtil {
      * @return
      */
     public static String getUsername(String token) {
-        Claims claims = Jwts.parser().setSigningKey(APPSECRET_KEY).parseClaimsJws(token).getBody();
+        Claims claims = getClaims(token);
         return claims.get("username").toString();
     }
 
@@ -120,7 +78,7 @@ public class JwtUtil {
      * @return
      */
     public static String getUserRole(String token) {
-        Claims claims = Jwts.parser().setSigningKey(APPSECRET_KEY).parseClaimsJws(token).getBody();
+        Claims claims = getClaims(token);
         return claims.get("rol").toString();
     }
 
@@ -131,73 +89,19 @@ public class JwtUtil {
      * @return
      */
     public static boolean isExpiration(String token) {
-        Claims claims = Jwts.parser().setSigningKey(APPSECRET_KEY).parseClaimsJws(token).getBody();
+        Claims claims = getClaims(token);
         return claims.getExpiration().before(new Date());
     }
 
-//    public static void main(String[] args) {
-//        String name = "acong";
-//        String role = "rol";
-//        String token = createToken(name, role);
-//        System.out.println(token);
-//
-//        Claims claims = checkJWT(token);
-//        String string = JSON.toJSONString(claims);
-//        System.out.println(claims.get("username"));
-//
-//        System.out.println(getUsername(token));
-//        System.out.println(getUserRole(token));
-//        System.out.println(isExpiration(token));
-////        User user = new User();
-////        user.setFaceImage("a");
-////        user.setId("1");
-////        user.setRoleId("role");
-////        String userStr = JSON.toJSONString(user);
-////        String token = createToken(userStr);
-////        Claims claims = checkJWT(token);
-////        boolean expiration = isExpiration(token);
-//
-//
-//    }
+    private static Claims getClaims(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return claims;
+    }
 
+    public static Boolean validateToken(String token) {
+        return !isExpiration(token);
+    }
 
-    /**
-     * eyJhbGciOiJIUzI1NiJ9.
-     * eyJzdWIiOiJjb25nZ2UiLCJpZCI6IjExMDExIiwibmFtZSI6Im51b3dlaXNpa2kiLCJpbWciOiJ3d3cudW9rby5jb20vMS5wbmciLCJpYXQiOjE1NTQ5OTI1NzksImV4cCI6MTU1NTU5NzM3OX0.
-     * 6DJ9En-UBcTiMRldZeevJq3e1NxJgOWryUyim4_-tEE
-     *
-     * @param args
-     */
-
-	/*public static void main(String[] args) {
-
-		Users user = new Users();
-		user.setId("11011");
-		user.setUserName("nuoweisiki");
-		user.setFaceImage("www.uoko.com/1.png");
-		String token = generateJsonWebToken(user);
-
-		System.out.println(token);
-
-		Claims claims = checkJWT(token);
-		if (claims != null) {
-			String id = claims.get("id").toString();
-			String name = claims.get("name").toString();
-			String img = claims.get("img").toString();
-
-			String rol = claims.get("rol").toString();
-
-			System.out.println("id:" + id);
-			System.out.println("name:" + name);
-			System.out.println("img:" + img);
-
-			System.out.println("rol:" + rol);
-
-
-
-		}
-
-	}*/
 
 }
 

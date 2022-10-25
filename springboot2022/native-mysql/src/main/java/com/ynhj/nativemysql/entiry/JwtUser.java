@@ -3,7 +3,6 @@ package com.ynhj.nativemysql.entiry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.context.support.BeanDefinitionDsl;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +35,7 @@ public class JwtUser implements UserDetails {
 
     @Getter
     @Setter
-    private List<BeanDefinitionDsl.Role> roles;
+    private List<Role> roles;
 
     @Override
     public String getUsername() {
@@ -69,7 +68,7 @@ public class JwtUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(authority -> new SimpleGrantedAuthority(authority.name())).collect(Collectors.toList());
+        return this.roles.stream().map(authority -> new SimpleGrantedAuthority(authority.getName())).collect(Collectors.toList());
     }
 
     @JsonIgnore
