@@ -1,4 +1,4 @@
-package com.ynhj.nativemysql.entiry.dto;
+package com.ynhj.ingress.entity.dto;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;

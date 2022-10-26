@@ -1,4 +1,4 @@
-package com.ynhj.nativemysql.entiry.vo;
+package com.ynhj.ingress.entity.vo;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;

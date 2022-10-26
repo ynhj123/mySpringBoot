@@ -1,6 +1,6 @@
 package com.ynhj.nativemysql.repository;
 
-import com.ynhj.nativemysql.entiry.po.UserPo;
+import com.ynhj.nativemysql.entity.po.UserPo;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;

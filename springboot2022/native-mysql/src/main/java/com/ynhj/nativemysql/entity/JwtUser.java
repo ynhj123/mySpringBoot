@@ -1,4 +1,4 @@
-package com.ynhj.nativemysql.entiry;
+package com.ynhj.nativemysql.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

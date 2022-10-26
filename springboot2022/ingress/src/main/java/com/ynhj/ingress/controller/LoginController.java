@@ -1,9 +1,9 @@
-package com.ynhj.nativemysql.controller;
+package com.ynhj.ingress.controller;
 
-import com.ynhj.nativemysql.common.entity.R;
-import com.ynhj.nativemysql.entity.dto.LoginUserDto;
-import com.ynhj.nativemysql.entity.vo.LoginUserVo;
-import com.ynhj.nativemysql.service.UserService;
+import com.ynhj.ingress.common.entity.R;
+import com.ynhj.ingress.entity.dto.LoginUserDto;
+import com.ynhj.ingress.entity.vo.LoginUserVo;
+import com.ynhj.ingress.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

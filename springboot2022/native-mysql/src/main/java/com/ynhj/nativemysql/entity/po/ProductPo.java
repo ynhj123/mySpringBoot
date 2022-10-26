@@ -1,4 +1,4 @@
-package com.ynhj.nativemysql.entiry.po;
+package com.ynhj.nativemysql.entity.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

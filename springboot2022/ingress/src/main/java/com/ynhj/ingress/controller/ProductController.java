@@ -1,11 +1,11 @@
-package com.ynhj.nativemysql.controller;
+package com.ynhj.ingress.controller;
 
-import com.ynhj.nativemysql.common.entity.GlobalException;
-import com.ynhj.nativemysql.common.entity.R;
-import com.ynhj.nativemysql.entity.dto.ProductDto;
-import com.ynhj.nativemysql.entity.dto.UpdateProductDto;
-import com.ynhj.nativemysql.entity.vo.ProductVo;
-import com.ynhj.nativemysql.service.ProductService;
+import com.ynhj.ingress.common.entity.GlobalException;
+import com.ynhj.ingress.common.entity.R;
+import com.ynhj.ingress.entity.dto.ProductDto;
+import com.ynhj.ingress.entity.dto.UpdateProductDto;
+import com.ynhj.ingress.entity.vo.ProductVo;
+import com.ynhj.ingress.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.ynhj.nativemysql.entiry;
+package com.ynhj.nativemysql.entity;
 
 /**
  * @date: 2022/10/25

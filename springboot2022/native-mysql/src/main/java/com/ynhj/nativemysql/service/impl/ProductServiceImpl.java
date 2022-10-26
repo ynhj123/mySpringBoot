@@ -1,10 +1,10 @@
 package com.ynhj.nativemysql.service.impl;
 
 import com.ynhj.nativemysql.common.entity.GlobalException;
-import com.ynhj.nativemysql.entiry.po.ProductPo;
-import com.ynhj.nativemysql.entiry.dto.ProductDto;
-import com.ynhj.nativemysql.entiry.dto.UpdateProductDto;
-import com.ynhj.nativemysql.entiry.vo.ProductVo;
+import com.ynhj.nativemysql.entity.po.ProductPo;
+import com.ynhj.nativemysql.entity.dto.ProductDto;
+import com.ynhj.nativemysql.entity.dto.UpdateProductDto;
+import com.ynhj.nativemysql.entity.vo.ProductVo;
 import com.ynhj.nativemysql.repository.ProductRepo;
 import com.ynhj.nativemysql.service.ProductService;
 import lombok.RequiredArgsConstructor;

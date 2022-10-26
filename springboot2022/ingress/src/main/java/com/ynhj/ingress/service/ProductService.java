@@ -1,8 +1,8 @@
-package com.ynhj.nativemysql.service;
+package com.ynhj.ingress.service;
 
-import com.ynhj.nativemysql.entity.dto.ProductDto;
-import com.ynhj.nativemysql.entity.dto.UpdateProductDto;
-import com.ynhj.nativemysql.entity.vo.ProductVo;
+import com.ynhj.ingress.entity.dto.ProductDto;
+import com.ynhj.ingress.entity.dto.UpdateProductDto;
+import com.ynhj.ingress.entity.vo.ProductVo;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import reactor.core.publisher.Flux;

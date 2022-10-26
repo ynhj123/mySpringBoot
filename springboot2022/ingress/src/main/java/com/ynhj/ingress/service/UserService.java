@@ -1,7 +1,7 @@
-package com.ynhj.nativemysql.service;
+package com.ynhj.ingress.service;
 
-import com.ynhj.nativemysql.entity.dto.LoginUserDto;
-import com.ynhj.nativemysql.entity.vo.LoginUserVo;
+import com.ynhj.ingress.entity.dto.LoginUserDto;
+import com.ynhj.ingress.entity.vo.LoginUserVo;
 import reactor.core.publisher.Mono;
 
 /**
