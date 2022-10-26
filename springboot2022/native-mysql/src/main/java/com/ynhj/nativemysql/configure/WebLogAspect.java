@@ -1,11 +1,11 @@
 package com.ynhj.nativemysql.configure;
 
 import com.alibaba.fastjson2.JSON;
+import com.ynhj.nativemysql.common.entity.GlobalException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -43,43 +43,45 @@ public class WebLogAspect {
     @Around("webLogPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long start = System.currentTimeMillis();
-        Object result = proceedingJoinPoint.proceed();
-        if (result instanceof Mono) {
-            var monoResult = (Mono<?>) result;
-            return monoResult.doOnSuccess(o -> {
-                RequestInfo requestInfo = ReactiveRequestContextHolder.getInstance().get();
-                requestInfo.setClassMethod(String.format("%s.%s", proceedingJoinPoint.getSignature().getDeclaringTypeName(),
-                        proceedingJoinPoint.getSignature().getName()));
-                requestInfo.setRequestParams(getRequestParamsByProceedingJoinPoint(proceedingJoinPoint));
-                requestInfo.setResult(o);
-                requestInfo.setTimeCost(System.currentTimeMillis() - start);
-                log.info("Request Info: {}", JSON.toJSONString(requestInfo));
-            });
-        }
-        return result;
+        return Mono.deferContextual(ctx -> {
+            RequestInfo requestInfo = ctx.get(RequestInfo.class);
+            requestInfo.setClassMethod(String.format("%s.%s", proceedingJoinPoint.getSignature().getDeclaringTypeName(),
+                    proceedingJoinPoint.getSignature().getName()));
+            requestInfo.setRequestParams(getRequestParamsByProceedingJoinPoint(proceedingJoinPoint));
+            Mono monoResult;
+            try {
+                monoResult = (Mono<?>) proceedingJoinPoint.proceed();
+            } catch (Throwable e) {
+                logError(requestInfo, e);
+                if (e instanceof GlobalException) {
+                    throw (GlobalException) e;
+                }
+                throw new RuntimeException(e);
+            }
+            return monoResult
+                    .doOnNext(o -> logSuccess(start, requestInfo, o));
+        }).doOnError(e -> {
+
+        });
     }
 
-    /**
-     * 异常通知：
-     * 1. 在目标方法非正常结束，发生异常或者抛出异常时执行
-     * 1. 在异常通知中设置异常信息，并将其保存
-     *
-     * @param throwable
-     */
-    @AfterThrowing(value = "webLogPointcut()", throwing = "throwable")
-    public void doAfterThrowing(JoinPoint joinPoint, RuntimeException throwable) {
-        // 保存异常日志记录
-        RequestInfo request = ReactiveRequestContextHolder.getInstance().get();
+    private void logSuccess(long start, RequestInfo requestInfo, Object o) {
+        requestInfo.setTimeCost(System.currentTimeMillis() - start);
+        requestInfo.setResult(o);
+        log.info("Request Info: {}", JSON.toJSONString(requestInfo));
+    }
+
+    private void logError(RequestInfo requestInfo, Throwable e) {
         RequestErrorInfo requestErrorInfo = new RequestErrorInfo();
-        requestErrorInfo.setIp(request.getIp());
-        requestErrorInfo.setUrl(request.getUrl());
-        requestErrorInfo.setHttpMethod(request.getHttpMethod());
-        requestErrorInfo.setClassMethod(String.format("%s.%s", joinPoint.getSignature().getDeclaringTypeName(),
-                joinPoint.getSignature().getName()));
-        requestErrorInfo.setRequestParams(getRequestParamsByJoinPoint(joinPoint));
-        requestErrorInfo.setException(throwable);
+        requestErrorInfo.setIp(requestInfo.getIp());
+        requestErrorInfo.setUrl(requestInfo.getUrl());
+        requestErrorInfo.setHttpMethod(requestInfo.getHttpMethod());
+        requestErrorInfo.setClassMethod(requestInfo.getClassMethod());
+        requestErrorInfo.setRequestParams(requestInfo.getRequestParams());
+        requestErrorInfo.setException(e.getMessage());
         log.error("Error Request Info: {}", JSON.toJSONString(requestErrorInfo));
     }
+
 
     @Data
     public static class RequestInfo {
@@ -99,7 +101,7 @@ public class WebLogAspect {
         private String httpMethod;
         private String classMethod;
         private Object requestParams;
-        private RuntimeException exception;
+        private String exception;
     }
 
     private Map<String, Object> getRequestParamsByProceedingJoinPoint(ProceedingJoinPoint proceedingJoinPoint) {

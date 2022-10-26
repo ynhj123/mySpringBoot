@@ -1,6 +1,6 @@
 package com.ynhj.nativemysql.common.filter;
 
-import com.ynhj.nativemysql.configure.ReactiveRequestContextHolder;
+import com.ynhj.nativemysql.configure.WebLogAspect;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
@@ -20,8 +20,12 @@ public class ReactiveRequestContextFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        ReactiveRequestContextHolder.getInstance().init(request);
-        return chain.filter(exchange);
+        final WebLogAspect.RequestInfo requestInfo = new WebLogAspect.RequestInfo();
+
+        requestInfo.setIp(request.getRemoteAddress().getHostName());
+        requestInfo.setUrl(request.getURI().toString());
+        requestInfo.setHttpMethod(request.getMethodValue());
+        return chain.filter(exchange).contextWrite(ctx -> ctx.put(WebLogAspect.RequestInfo.class, requestInfo));
     }
 
 }
