@@ -15,11 +15,11 @@ public class GraphqlController {
 
     @SchemaMapping(typeName = "Query", field = "products")
     Flux<Product> products() {
-        return this.http.get().uri("http://localhost:8080/products")
+        return this.http.get().uri("http://localhost:8080/flux/products")
                 .retrieve().bodyToFlux(Product.class);
     }
 
 }
 
-record Product(Integer id, String name, String describe) {
+record Product(Integer id, String name, String description) {
 }

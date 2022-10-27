@@ -1,9 +1,9 @@
 package com.ynhj.nativemysql.service.impl;
 
 import com.ynhj.nativemysql.common.entity.GlobalException;
-import com.ynhj.nativemysql.entity.po.ProductPo;
 import com.ynhj.nativemysql.entity.dto.ProductDto;
 import com.ynhj.nativemysql.entity.dto.UpdateProductDto;
+import com.ynhj.nativemysql.entity.po.ProductPo;
 import com.ynhj.nativemysql.entity.vo.ProductVo;
 import com.ynhj.nativemysql.repository.ProductRepo;
 import com.ynhj.nativemysql.service.ProductService;
@@ -28,6 +28,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Flux<ProductVo> findAll(Long pageSize, Long pageNum) {
         return productRepo.findAll().skip(pageNum * pageSize).take(pageSize).map(this::wrapper).cache();
+    }
+
+    @Override
+    public Flux<ProductPo> findAllFlux() {
+        return productRepo.findAll().cache();
     }
 
     @Override

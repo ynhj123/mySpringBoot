@@ -23,7 +23,7 @@ public class SecurityConfig {
         final var permitAll = new String[]{"/auth/**", "/actuator/health/**",
                 "/v3/api-docs", "/swagger-resources/configuration/ui",
                 "/swagger-resources", "/swagger-resources/configuration/security",
-                "/doc.html", "/webjars/**",};
+                "/doc.html", "/webjars/**","/flux/**"};
         return http
                 .exceptionHandling()
                 .authenticationEntryPoint((swe, e) ->

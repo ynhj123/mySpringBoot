@@ -15,6 +15,7 @@
 - - [x] [日志打印]()
 - - [ ] [webclient](#)
 - - [ ] [gateway](#)
+- - [*] [graphql](#)
 - [x] [springsecurity](https://docs.spring.io/spring-security/reference/reactive/getting-started.html)
 - - [x] [登录注册](#)
 - [ ] [云原生](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/#getting-started)
