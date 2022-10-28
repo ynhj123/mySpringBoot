@@ -22,13 +22,13 @@ public class LoginController {
 
     @PostMapping("/login")
     public Mono<R<LoginUserVo>> login(@RequestBody LoginUserDto user) {
-        return R.monoOk(userService.login(user));
+        return userService.login(user);
     }
 
 
     @PostMapping("/signup")
     public Mono<R<LoginUserVo>> signUp(@RequestBody LoginUserDto user) {
-        return R.monoOk(userService.signup(user));
+        return userService.signup(user);
     }
 
 }

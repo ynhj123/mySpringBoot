@@ -1,5 +1,6 @@
 package com.ynhj.ingress.service;
 
+import com.ynhj.ingress.common.entity.R;
 import com.ynhj.ingress.entity.dto.LoginUserDto;
 import com.ynhj.ingress.entity.vo.LoginUserVo;
 import reactor.core.publisher.Mono;
@@ -12,7 +13,7 @@ import reactor.core.publisher.Mono;
  * @description： update_version: update_date: update_author: update_note:
  */
 public interface UserService {
-    Mono<LoginUserVo> login(LoginUserDto user);
+    Mono<R<LoginUserVo>> login(LoginUserDto user);
 
-    Mono<LoginUserVo> signup(LoginUserDto user);
+    Mono<R<LoginUserVo>> signup(LoginUserDto user);
 }
