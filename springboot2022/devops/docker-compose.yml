@@ -10,19 +10,35 @@ services:
     networks:
       - y1-net
     ports:
-      - 6379:6379
+      - "6379:6379"
   mysql:
     image: mysql:5.7
     container_name: y1-mysql
     networks:
       - y1-net
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
       - ../data/mysql:/var/lib/mysql
     environment:
       TZ: Asia/Shanghai
       MYSQL_ROOT_PASSWORD: root123
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      - STORAGE_TYPE=mysql
+      - MYSQL_DB=zipkin
+      - MYSQL_USER=root
+      - MYSQL_PASS=root123
+      - MYSQL_HOST=y1-mysql
+      - MYSQL_TCP_PORT=3306
+    networks:
+      - y1-net
+    ports:
+      - "9411:9411"
+    depends_on:
+      - mysql
 
 
 
